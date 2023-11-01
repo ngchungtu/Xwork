@@ -1,10 +1,84 @@
 .App {
   text-align: center;
+  padding: 40px 0;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 25vmin;
   pointer-events: none;
+}
+
+.form_group .form_group-input-hidden {
+  visibility: hidden;
+}
+
+.container-form,
+.container-detail {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.container-form{
+  flex-direction: column;
+  align-items: center;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.form_group>input,
+.form_group>button {
+  margin: 10px;
+  padding: 10px;
+}
+
+.form_group>button {
+  color: #fff;
+  background-color: #f59e0b;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-check-list{
+  color: #fff;
+  background-color: #0e7490;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  padding: 10px;
+}
+
+.order-title{
+  font-weight: bold;
+  color: #115e59;
+}
+
+.detail-item {
+  width: 50%;
+  background-color: #ffedd5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 5px;
+  margin: 7px 0;
+}
+
+.detail-item>p{
+  margin: 5px 10px;
+  padding: 0;
+}
+
+.detail-item>p>span{
+  color: #6b7280;
+  font-size: 13px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -32,6 +106,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
