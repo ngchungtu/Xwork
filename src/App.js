@@ -4,9 +4,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import moment from 'moment/moment';
 
-// https://script.google.com/macros/s/AKfycbw4MFByMqKUV76fIpRmiD16Nr995p9WNNaY6u0HnWL7JXNlk60Kx7ntHT6XfIbhyz5f/exec
-
-const API_URL = "https://opensheet.elk.sh/1Hcq2oszCNFxK5zDvJzkJDP3z4UyrEZg-vcpMdyx0WU8/api_xwork"
+const API_URL = process.env.API_EXCEL
+// https://opensheet.elk.sh/spreadsheet_id/tab_name
 
 function App() {
   const taskId = Math.floor(Math.random() * 1000)
@@ -35,7 +34,7 @@ function App() {
     const formEle = document.querySelector("form");
     const formDatab = new FormData(formEle);
     fetch(
-      "https://script.google.com/macros/s/AKfycbw4MFByMqKUV76fIpRmiD16Nr995p9WNNaY6u0HnWL7JXNlk60Kx7ntHT6XfIbhyz5f/exec",
+      process.env.API_SCRIPT_EXCEL,
       {
         method: "POST",
         body: formDatab
