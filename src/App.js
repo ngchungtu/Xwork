@@ -1,11 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import moment from 'moment/moment';
-
-const API_URL = process.env.API_EXCEL
-// https://opensheet.elk.sh/spreadsheet_id/tab_name
+import { handleGetPost, handlePost } from './api';
+import * as err_type from './api/errorLog'
 
 function App() {
   const taskId = Math.floor(Math.random() * 1000)
@@ -21,41 +19,61 @@ function App() {
 
   const [dataList, setDataList] = useState([])
 
-  const getDataFromApi = async () => {
-    return await axios.get(API_URL).then((response) => {
-      setDataList(response.data)
-      console.log('_res', response.data);
-    })
-  }
-
   const handleSubmitForm = async (e) => {
     e.preventDefault()
     setLoading(true)
-    const formEle = document.querySelector("form");
-    const formDatab = new FormData(formEle);
-    fetch(
-      process.env.API_SCRIPT_EXCEL,
-      {
-        method: "POST",
-        body: formDatab
+    /* #region  basic call api */
+    // const formEle = document.querySelector("form");
+    // const formDatab = new FormData(formEle);
+    // fetch(
+    //   API_SCRIPT,
+    //   {
+    //     method: "POST",
+    //     body: formDatab
+    //   }
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setLoading(true)
+    //     console.log(data);
+    //     window.location.reload()
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     setLoading(false)
+    //   });
+    /* #endregion */
+
+    try {
+      const formEle = document.querySelector("form");
+      const formDatab = new FormData(formEle);
+      if (name && province && detail) {
+        handlePost(formDatab).then(() => {
+          setName("")
+          setProvince("")
+          setDetail("")
+          setLoading(false);
+          window.location.reload()
+        })
+      } else {
+        console.log(err_type.errLog[404]);
+        setLoading(false);
       }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setLoading(true)
-        console.log(data);
-        window.location.reload()
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false)
-      });
-    // const data = {name, province, detail, time}
-    // console.log(data);
+    } catch (error) {
+      setLoading(false);
+      console.log(err_type.errLog[408]);
+    }
+  }
+
+  const handleLogAPI = async () => {
+    handleGetPost().then((response) => {
+      setDataList(response.data)
+      console.log('res', response.data)
+    })
   }
 
   useEffect(() => {
-    getDataFromApi()
+    handleLogAPI()
   }, [])
   return (
     <div className="App">
@@ -65,7 +83,7 @@ function App() {
           ? <p>Loading...</p>
           : <div className="container-form">
             <form className='form_group' onSubmit={handleSubmitForm}>
-              <input type="text" className="form_group-input-hidden" name="id" value={id} onChange={(e) => setId(e.target.value)} placeholder='Id' />
+              <input type="text" className="form_group-input-hidden" name="id" value={id} onChange={(e) => setId(e.target.value)} readOnly />
               <input type="text" className="form_group-input" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />
               <input type="text" className="form_group-input" name='province' value={province} onChange={(e) => setProvince(e.target.value)} placeholder='Province' />
               <input type="text" className="form_group-input" name='detail' value={detail} onChange={(e) => setDetail(e.target.value)} placeholder='Detail' />
@@ -84,6 +102,10 @@ function App() {
             dataList.map((i) => (
               <div key={i.id} className='container-detail'>
                 <div className='detail-item'>
+                  <div className='item-icon'>
+                    <i className="ri-edit-line"></i>
+                    <i className="ri-delete-bin-line"></i>
+                  </div>
                   <p><span>Name:</span> {i.name}</p>
                   <p><span>Province:</span> {i.province}</p>
                   <p><span>Detail</span> {i.detail}</p>
